@@ -20,13 +20,13 @@ function main() {
 main();
 
 function setupUI() {
-  var area = createTextArea(0, "Important + Not Urgent");
+  var area = createTextArea(0, "⚠️ & Not ⏱", "Important & Not Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(1, "Important + Urgent");
+  var area = createTextArea(1, "⚠️ & ⏱", "Important & Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(2, "Not Important + Not Urgent");
+  var area = createTextArea(2, "Not ⚠️ & not ⏱", "Not Important & Not Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(3, "Not Important + Urgent");
+  var area = createTextArea(3, "Not ⚠️ & ⏱", "Not Important & Urgent");
   document.body.appendChild(area);
 
   document.getElementById("ta-main-0").innerHTML = readFile(0);
@@ -35,12 +35,13 @@ function setupUI() {
   document.getElementById("ta-main-3").innerHTML = readFile(3);
 }
 
-function createTextArea(id, headingText) {
+function createTextArea(id, headingText, title) {
   var div = document.createElement("div");
 
   var heading = document.createElement("div");
   heading.innerHTML = headingText;
-  heading.contentEditable = false;
+  heading.title = title;
+  heading.contentEditable = true;
   heading.className = "ta-main-heading";
   heading.id = "ta-main-heading-" + id;
   div.appendChild(heading);
@@ -58,16 +59,16 @@ function createTextArea(id, headingText) {
 }
 
 function readFile(num) {
+  var data = "";
   try {
     var path = base + "ta-main-" + num + ".txt";
     if (fs.existsSync(path)) {
       var data = fs.readFileSync(path);
-      return data || "";
     }
   } catch (e) {
     console.error(e);
-    return "";
   }
+  return data;
 }
 
 function saveStringToPath(data, path) {

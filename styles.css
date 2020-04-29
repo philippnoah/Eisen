@@ -8,6 +8,7 @@
 html, body {
   padding: 0px;
   margin: 0px;
+  overflow: hidden;
 }
 
 input[type='checkbox'] {
@@ -67,12 +68,16 @@ input[type='checkbox'] {
 
 .ta-main-heading {
   position: absolute;
-  width: 50vw;
-  min-height: 20px;
-  background: rgba(0,0,0,0.1);
-  z-index: 1;
-  text-align: center;
-  padding: 12px 0px;
+      width: 50vw;
+      /* width: calc(50vw - 20px); */
+      /* margin: 10px; */
+      min-height: 20px;
+      /* border-radius: 8px; */
+      background: rgba(0,0,0,0.1);
+      z-index: 1;
+      text-align: center;
+      padding: 10px 0px;
+      /* padding: 10px 0px; */
 }
 
 #ta-main-heading-0 {
