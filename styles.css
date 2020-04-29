@@ -1,0 +1,153 @@
+* {
+  outline: none;
+  font-family: "Montserrat";
+  font-size: 16px;
+  user-select: none;
+}
+
+html, body {
+  padding: 0px;
+  margin: 0px;
+}
+
+input[type='checkbox'] {
+  margin-right: 10px;
+  position: absolute;
+  /* user-select: none; */
+  margin: 2px 0px 0px -20px;
+}
+
+.ta-main {
+  position: absolute;
+  width: calc(40vw - 0.5px);
+  height: calc(40vh - 0.5px);
+  resize: none;
+  padding: calc(50px + 2.5vh) 5vw 5vh 5vw;
+  border: 0.5px solid rgba(0,0,0,0.1);
+  background: white;
+  display: inline-block;
+  /* white-space: pre-wrap; */
+}
+
+#ta-main-0 {
+  left: 0;
+  top: 0;
+}
+#ta-main-1 {
+  left: 50vw;
+  top: 0;
+}
+#ta-main-2 {
+  left: 0;
+  top: 50vh;
+}
+#ta-main-3 {
+  left: 50vw;
+  top: 50vh;
+}
+
+#ta-main-0 wrapper .task {
+  background: #37FF8B;
+  color: rgba(0,0,0,0.7);
+}
+
+#ta-main-1 wrapper .task {
+  background: #ff005b;
+  color: white;
+}
+
+#ta-main-2 wrapper .task {
+  background: #00d9ff;
+  color: rgba(0,0,0,0.7);
+}
+
+#ta-main-3 wrapper .task {
+  background: rgba(0,0,0,0.1)
+}
+
+.ta-main-heading {
+  position: absolute;
+  width: 50vw;
+  min-height: 20px;
+  background: rgba(0,0,0,0.1);
+  z-index: 1;
+  text-align: center;
+  padding: 12px 0px;
+}
+
+#ta-main-heading-0 {
+  left: 0;
+  top: 0;
+}
+#ta-main-heading-1 {
+  left: 50vw;
+  top: 0;
+}
+#ta-main-heading-2 {
+  left: 0;
+  top: 50vh;
+}
+#ta-main-heading-3 {
+  left: 50vw;
+  top: 50vh;
+}
+
+.wrapper {
+  /* display: block; */
+}
+
+.task {
+  display: inline-block;
+  background: rgba(0,0,0,0.1);
+  /* cursor: pointer; */
+  margin: 5px 5px 5px 5px;
+  padding: 6px 12px 6px 30px;
+  border-radius: 5px;
+  min-height: 20px
+}
+
+.taskXXXXX:hover {
+  background: rgba(0,0,0,0.3);
+}
+
+.heading-1 {
+  display: inline-block;
+  background: cyan;
+  padding: 8px 12px;
+  margin: 5px;
+  color: rgba(0,0,0,0.5);
+  border-radius: 5px;
+  font-family: "Montserrat"
+}
+
+.hidden-space {
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: red;
+  opacity: 0;
+}
+
+.translucent {
+  opacity: 0;
+}
+
+.display-inline-block {
+  display: inline-block;
+  padding-left: 1px;
+}
+
+.display-inline {
+  display: inline;
+}
+
+.display-block {
+  display: block;
+}
+
+.checkbox {
+  height: 10px;
+  width: 10px;
+  color: red;
+}
