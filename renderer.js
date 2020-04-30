@@ -14,6 +14,7 @@ const app = remote.app;
 let base = app.getPath("userData") + "/files/";
 NodeList.prototype.forEach = Array.prototype.forEach;
 var downKeys = [];
+var detailInfo = {};
 
 function main() {
   setupUI();
@@ -34,8 +35,22 @@ function setupUI() {
   document.getElementById("ta-main-1").innerHTML = readFile(1);
   document.getElementById("ta-main-2").innerHTML = readFile(2);
   document.getElementById("ta-main-3").innerHTML = readFile(3);
-}
 
+  document.onkeydown = event => registerKeyEvent(event);
+  document.onkeyup = event => registerKeyEvent(event);
+}
+function registerKeyEvent(e) {
+  if (e.type == "keydown") {
+    downKeys.push(e.which);
+  }
+
+  if (e.type == "keyup") {
+    const index = downKeys.indexOf(e.which);
+    if (index > -1) {
+      downKeys.splice(index, 1);
+    }
+  }
+}
 function createTextArea(id, headingText, title) {
   var div = document.createElement("div");
 
@@ -95,10 +110,6 @@ function saveStringToPath(data, path) {
 
 function parseKeyUp(e) {
   var pos = getCaret();
-  const index = downKeys.indexOf(e.which);
-  if (index > -1) {
-    downKeys.splice(index, 1);
-  }
   parse(pos.node);
   var path = base + e.target.id + ".txt";
   let data = e.target.innerHTML;
@@ -109,7 +120,6 @@ function parseKeyDown(e) {
   var pos = getCaret();
   var par = nextParentWrapper(pos.node);
   var offset = textOffsetUntilNode(par, pos.node, 0) + pos.offset;
-  downKeys.push(e.which);
   if (par) {
     if (e.which == 8) {
       // DELETE
@@ -129,6 +139,14 @@ function parseKeyDown(e) {
   }
 
   if (e.which == 13 && par) {
+    if (offset == pos.node.textContent.length) {
+      var taskNode = createTask("");
+      insertAfter(taskNode, par);
+      setCaret(taskNode, 1);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     // ENTER
     var newLine = document.createElement("div");
     var text = pos.node.nodeValue || "";
@@ -226,9 +244,103 @@ function nextParentWithClass(node, className) {
 function createTask(content) {
   var task = document.createElement("wrapper");
   task.className = "wrapper type-task display-block";
-  task.innerHTML = `<div class="task"><div contenteditable="false"><input type="checkbox" onClick="handleCheckboxClick(event)"/></div><div>${content ||
+  var id = generateID(12);
+  task.innerHTML = `<div taskID="${id}" id="${id}" class="task" onMouseDown="onMouseDownTask(event)" onMouseLeave="onMouseLeaveTask(event)" onMouseOver="onMouseOverTask(event)" onClick="onClickTask(event)"><div contenteditable="false"><input type="checkbox" onClick="handleCheckboxClick(event)"/></div><div>${content ||
     "<br/>"}</div></div>`;
   return task;
+}
+
+function generateID(len) {
+  var result = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < len; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+function onMouseDownTask(e) {
+  if (downKeys.includes(91)) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+}
+
+function onClickTask(e) {
+  if (downKeys.includes(91)) {
+    var node = nextParentWithClass(e.target, "task");
+    var detail = {
+      id: node.getAttribute("taskid"),
+      name: node.textContent,
+      dueDate: node.getAttribute("duedate"),
+      notes: node.getAttribute("tasknotes")
+    };
+    detailInfo = detail;
+    var popover = createDetailView();
+    document.body.appendChild(popover);
+  }
+}
+
+function createDetailView() {
+  var data = detailInfo;
+  var popover = document.createElement("div");
+  popover.id = "popover";
+  popover.className = "popover";
+  popover.innerHTML = `<input type="button" class="popover-close-button" id="popover-close-button" value="close" onClick="removeDetailView(event)"/><p class="task-detail-name">${data.name ||
+    "Task Name"}</p><input onKeyUp="onDueDateChange(event)" class="task-detail-duedate" placeholder="Add due date..." value="${data.dueDate ||
+    ""}"><textarea onKeyUp="onNotesChange(event)" class="task-detail-notes" placeholder="Add notes...">${data.notes ||
+    ""}</textarea>`;
+  var popoverBG = document.createElement("div");
+  popoverBG.id = "popover-bg";
+  popoverBG.className = "popover-bg";
+  popoverBG.addEventListener("click", e => removeDetailView(e), false);
+  popover.addEventListener("click", e => {}, false);
+  popoverBG.appendChild(popover);
+  return popoverBG;
+}
+
+function onDueDateChange(e) {
+  detailInfo.dueDate = e.target.value;
+}
+
+function onNotesChange(e) {
+  detailInfo.notes = e.target.value;
+}
+
+function removeDetailView(e) {
+  var popoverBG = document.getElementById("popover-bg");
+  var popoverCloseBtn = document.getElementById("popover-close-button");
+  if (e.target == popoverBG || e.target == popoverCloseBtn) {
+    var task = document.getElementById(detailInfo.id);
+    task.setAttribute("tasknotes", detailInfo.notes);
+    task.setAttribute("duedate", detailInfo.dueDate);
+    var textarea = nextParentWithClass(task, "ta-main");
+    var path = base + textarea.id + ".txt";
+    let data = textarea.innerHTML;
+    saveStringToPath(data, path);
+    popoverBG.remove();
+  }
+}
+
+function onMouseOverTask(e) {
+  if (downKeys.includes(91)) {
+    var node = nextParentWithClass(e.target, "task");
+    if (node) {
+      node.style.border = "2px solid rgba(0,0,0,0.2)";
+      node.style.cursor = "pointer";
+    }
+  } else {
+    onMouseLeaveTask(e);
+  }
+}
+
+function onMouseLeaveTask(e) {
+  var node = nextParentWithClass(e.target, "task");
+  if (node) {
+    node.style.cursor = "auto";
+    node.style.border = "0px solid rgba(0,0,0,0.2)";
+  }
 }
 
 function handleCheckboxClick(e) {

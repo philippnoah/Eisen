@@ -178,3 +178,63 @@ input[type='checkbox'] {
   width: 10px;
   color: red;
 }
+
+
+.popover-bg {
+  z-index: 2;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+}
+
+.popover {
+  z-index: 3;
+  position: absolute;
+  left: 12.5vw;
+  top: 12.5vh;
+  max-height: 65vh;
+  width: 65vw;
+  border-radius: 10px;
+  background-color: white;
+  padding: 5vh 5vw;
+}
+
+.popover p, div {
+  user-select: text;
+}
+
+.popover-close-button {
+  position: absolute;
+  right: 4vw;
+  top: 3vh;
+  /* text-decoration: underline; */
+  /* color: gray; */
+}
+
+.task-detail-name {
+  display: block;
+  font-size: 40px;
+  max-width: 100%;
+  overflow: scroll;
+}
+
+.task-detail-duedate {
+  margin: 2vh 0;
+      padding: 1vh 2vw;
+      border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.1);
+}
+
+.task-detail-notes {
+  margin: 0px;
+  width: 90%;
+  max-width: 90%;
+  background: #f0f0f0f0;
+  resize: none;
+  border: none;
+  border-radius: 10px;
+  padding: 5%;
+}
