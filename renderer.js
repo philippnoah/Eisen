@@ -13,6 +13,7 @@ const app = remote.app;
 // global vars
 let base = app.getPath("userData") + "/files/";
 NodeList.prototype.forEach = Array.prototype.forEach;
+var downKeys = [];
 
 function main() {
   setupUI();
@@ -24,7 +25,7 @@ function setupUI() {
   document.body.appendChild(area);
   var area = createTextArea(1, "⚠️ & ⏱", "Important & Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(2, "Not ⚠️ & not ⏱", "Not Important & Not Urgent");
+  var area = createTextArea(2, "Not ⚠️ & Not ⏱", "Not Important & Not Urgent");
   document.body.appendChild(area);
   var area = createTextArea(3, "Not ⚠️ & ⏱", "Not Important & Urgent");
   document.body.appendChild(area);
@@ -52,7 +53,7 @@ function createTextArea(id, headingText, title) {
   area.contentEditable = "plaintext-only";
   area.addEventListener("keyup", e => parseKeyUp(e), false);
   area.addEventListener("keydown", e => parseKeyDown(e), false);
-  area.addEventListener("onclick", e => parseKeyDown(e), false);
+  // area.addEventListener("onclick", e => parseKeyDown(e), false);
   div.appendChild(area);
 
   return div;
@@ -94,6 +95,10 @@ function saveStringToPath(data, path) {
 
 function parseKeyUp(e) {
   var pos = getCaret();
+  const index = downKeys.indexOf(e.which);
+  if (index > -1) {
+    downKeys.splice(index, 1);
+  }
   parse(pos.node);
   var path = base + e.target.id + ".txt";
   let data = e.target.innerHTML;
@@ -103,8 +108,9 @@ function parseKeyUp(e) {
 function parseKeyDown(e) {
   var pos = getCaret();
   var par = nextParentWrapper(pos.node);
+  var offset = textOffsetUntilNode(par, pos.node, 0) + pos.offset;
+  downKeys.push(e.which);
   if (par) {
-    var offset = textOffsetUntilNode(par, pos.node, 0) + pos.offset;
     if (e.which == 8) {
       // DELETE
       var r = getRange();
@@ -135,9 +141,34 @@ function parseKeyDown(e) {
     e.preventDefault();
     e.stopPropagation();
   }
+
+  if (e.which == 9) {
+    var node = pos.node;
+    if (par) {
+      node = par;
+    }
+    if (hasClass(node, "ta-main")) {
+      let div = document.createElement("div");
+      div.innerHTML = "<br>";
+      node.appendChild(div);
+      node = div;
+      setCaret(div, 0);
+    }
+    node = node.nodeType == 3 ? node.parentNode : node;
+    var ml = node.style.marginLeft;
+    ml = parseInt(ml, 10) ? parseInt(ml, 10) : 0;
+    var extra = 30;
+    if (downKeys.includes(16)) extra *= -1;
+    ml = ml + extra;
+    ml = ml >= 0 ? ml : 0;
+    node.style.marginLeft = ml + "px";
+    e.preventDefault();
+    e.stopPropagation();
+  }
 }
 
 function textOffsetUntilNode(parent, endNode, offset) {
+  if (!parent) return 0;
   var children = parent.childNodes;
   for (var i = 0; i < children.length; i++) {
     if (children[i] == endNode) break;

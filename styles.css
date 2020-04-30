@@ -1,8 +1,27 @@
 * {
   outline: none;
-  font-family: "Montserrat";
+  font-family: "HelveticaNeue";
   font-size: 16px;
   user-select: none;
+}
+
+/* montserrat-regular - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat Regular'), local('Montserrat-Regular'),
+       url('../fonts/montserrat/montserrat-v14-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/montserrat/montserrat-v14-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+/* montserrat-italic - latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Montserrat Italic'), local('Montserrat-Italic'),
+       url('../fonts/montserrat/montserrat-v14-latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/montserrat/montserrat-v14-latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 html, body {
@@ -20,11 +39,12 @@ input[type='checkbox'] {
 
 .ta-main {
   position: absolute;
-  width: calc(40vw - 0.5px);
-  height: calc(40vh - 0.5px);
+  width: calc(40vw - 1px);
+  height: calc(40vh - 1px);
   resize: none;
-  padding: calc(50px + 2.5vh) 5vw 5vh 5vw;
-  border: 0.5px solid rgba(0,0,0,0.1);
+  padding: calc(50px + 2.5vh) 5vw calc(50px + 2.5vh) 5vw;
+  border: 1px solid rgba(0,0,0,0.1);
+  overflow: scroll;
   background: white;
   display: inline-block;
   /* white-space: pre-wrap; */
@@ -58,12 +78,12 @@ input[type='checkbox'] {
 }
 
 #ta-main-2 wrapper .task {
-  background: #00d9ff;
-  color: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.1)
 }
 
 #ta-main-3 wrapper .task {
-  background: rgba(0,0,0,0.1)
+  color: rgba(0,0,0,0.9);
+  background: #00d9ff;
 }
 
 .ta-main-heading {
@@ -73,7 +93,7 @@ input[type='checkbox'] {
       /* margin: 10px; */
       min-height: 20px;
       /* border-radius: 8px; */
-      background: rgba(0,0,0,0.1);
+      background: #f0f0f0;
       z-index: 1;
       text-align: center;
       padding: 10px 0px;
@@ -87,6 +107,7 @@ input[type='checkbox'] {
 #ta-main-heading-1 {
   left: 50vw;
   top: 0;
+  border-left: 1px #d9d9d9 solid;
 }
 #ta-main-heading-2 {
   left: 0;
@@ -95,6 +116,7 @@ input[type='checkbox'] {
 #ta-main-heading-3 {
   left: 50vw;
   top: 50vh;
+  border-left: 1px #d9d9d9 solid;
 }
 
 .wrapper {
@@ -105,7 +127,7 @@ input[type='checkbox'] {
   display: inline-block;
   background: rgba(0,0,0,0.1);
   /* cursor: pointer; */
-  margin: 5px 5px 5px 5px;
+  margin: 5px 0px;
   padding: 6px 12px 6px 30px;
   border-radius: 5px;
   min-height: 20px
@@ -122,7 +144,7 @@ input[type='checkbox'] {
   margin: 5px;
   color: rgba(0,0,0,0.5);
   border-radius: 5px;
-  font-family: "Montserrat"
+  font-family: "HelveticaNeue"
 }
 
 .hidden-space {

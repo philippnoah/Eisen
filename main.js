@@ -1,8 +1,41 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, Menu} = require("electron");
 const path = require("path");
+const contextMenu = require("electron-context-menu");
+
+contextMenu({
+  prepend: (defaultActions, params, browserWindow) => [
+    {
+      label: "Rainbow",
+      visible: true
+    }
+  ]
+});
+
+function setMainMenu() {
+  var menu = Menu.buildFromTemplate([
+    {
+      label: "Electron",
+      submenu: [
+        {
+          label: "Options",
+          click: function() {
+            alert("Test");
+          }
+        }
+      ]
+    }
+  ]);
+
+  // Menu.setApplicationMenu(menu);
+}
+
+app.on("ready", () => {
+  setMainMenu();
+});
 
 function createWindow() {
+  setMainMenu();
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1000,
