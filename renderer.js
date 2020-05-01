@@ -22,13 +22,13 @@ function main() {
 main();
 
 function setupUI() {
-  var area = createTextArea(0, "⚠️ & Not ⏱", "Important & Not Urgent");
+  var area = createTextArea(0, "Important + Not Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(1, "⚠️ & ⏱", "Important & Urgent");
+  var area = createTextArea(1, "Important + Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(2, "Not ⚠️ & Not ⏱", "Not Important & Not Urgent");
+  var area = createTextArea(2, "Not Important + Not Urgent");
   document.body.appendChild(area);
-  var area = createTextArea(3, "Not ⚠️ & ⏱", "Not Important & Urgent");
+  var area = createTextArea(3, "Not Important + Urgent");
   document.body.appendChild(area);
 
   document.getElementById("ta-main-0").innerHTML = readFile(0);
@@ -51,15 +51,15 @@ function registerKeyEvent(e) {
     }
   }
 }
-function createTextArea(id, headingText, title) {
+function createTextArea(id, headingText) {
   var div = document.createElement("div");
 
   var heading = document.createElement("div");
-  heading.innerHTML = headingText;
-  heading.title = title;
-  heading.contentEditable = true;
+  var input = document.createElement("input");
+  input.value = headingText;
   heading.className = "ta-main-heading";
   heading.id = "ta-main-heading-" + id;
+  heading.appendChild(input);
   div.appendChild(heading);
 
   var area = document.createElement("div");
@@ -271,10 +271,10 @@ function onClickTask(e) {
   if (downKeys.includes(91)) {
     var node = nextParentWithClass(e.target, "task");
     var detail = {
-      id: node.getAttribute("taskid"),
-      name: node.textContent,
-      dueDate: node.getAttribute("duedate"),
-      notes: node.getAttribute("tasknotes")
+      id: node.getAttribute("taskid") || "error",
+      name: node.textContent || "",
+      dueDate: node.getAttribute("duedate") || "",
+      notes: node.getAttribute("tasknotes") || ""
     };
     detailInfo = detail;
     var popover = createDetailView();

@@ -1,18 +1,17 @@
 {
   "name": "Eisen",
   "version": "1.0.1",
-  "description": "A minimal Electron application",
+  "description": "An Eisenhower matrix app",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-packager . --icon=./assets/icon.icns"
   },
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "to-do",
+    "eisenhower-matrix",
+    "eisenhower",
+    "matrix"
   ],
   "author": "GitHub",
   "license": "CC0-1.0",
