@@ -4,8 +4,9 @@
   "description": "An Eisenhower matrix app",
   "main": "main.js",
   "scripts": {
+    "package": "asar pack ./Eisen-darwin-x64/Eisen.app/Contents/Resources/app ./Eisen-darwin-x64/Eisen.app/Contents/Resources/app.asar",
     "start": "electron .",
-    "build": "electron-packager . --icon=./assets/icon.icns"
+    "build": "electron-packager .  --icon=./assets/icon.icns --overwrite=true"
   },
   "keywords": [
     "to-do",
@@ -16,10 +17,11 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^8.2.3",
-    "electron-context-menu": "^2.0.0"
+    "asar": "^3.0.3",
+    "electron": "^8.2.3"
   },
   "dependencies": {
+    "electron-context-menu": "^2.0.0",
     "electron-packager": "^14.2.1"
   }
 }

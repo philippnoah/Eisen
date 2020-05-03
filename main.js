@@ -1,7 +1,9 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu} = require("electron");
+const {app, BrowserWindow, Menu, ipcMain} = require("electron");
 const path = require("path");
 const contextMenu = require("electron-context-menu");
+
+var shouldClose = false;
 
 contextMenu({
   prepend: (defaultActions, params, browserWindow) => [
@@ -37,21 +39,20 @@ app.on("ready", () => {
 function createWindow() {
   setMainMenu();
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const win = new BrowserWindow({
     width: 1000,
     height: 800,
     // frame: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true
     }
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile("index.html");
+  win.loadFile("index.html");
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  win.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
@@ -69,7 +70,9 @@ app.on("window-all-closed", function() {
 app.on("activate", function() {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
 
 // In this file you can include the rest of your app's specific main process

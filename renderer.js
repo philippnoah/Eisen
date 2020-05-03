@@ -39,6 +39,7 @@ function setupUI() {
   document.onkeydown = event => registerKeyEvent(event);
   document.onkeyup = event => registerKeyEvent(event);
 }
+
 function registerKeyEvent(e) {
   if (e.type == "keydown") {
     downKeys.push(e.which);
@@ -120,10 +121,15 @@ function parseKeyDown(e) {
   var pos = getCaret();
   var par = nextParentWrapper(pos.node);
   var offset = textOffsetUntilNode(par, pos.node, 0) + pos.offset;
+  var r = getRange();
+
+  if (e.which == 8) {
+    console.log(pos, r);
+  }
+
   if (par) {
     if (e.which == 8) {
       // DELETE
-      var r = getRange();
       if (offset == 0 && r.collapsed) {
         var inner = par.textContent;
         var div = document.createElement("div");
@@ -139,6 +145,14 @@ function parseKeyDown(e) {
   }
 
   if (e.which == 13 && par) {
+    if (offset == 0 && r.collapsed) {
+      var newLine = document.createElement("div");
+      newLine.innerHTML = "<br>";
+      insertBefore(newLine, par);
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     if (offset == pos.node.textContent.length) {
       var taskNode = createTask("");
       insertAfter(taskNode, par);
@@ -245,7 +259,7 @@ function createTask(content) {
   var task = document.createElement("wrapper");
   task.className = "wrapper type-task display-block";
   var id = generateID(12);
-  task.innerHTML = `<div taskID="${id}" id="${id}" class="task" onMouseDown="onMouseDownTask(event)" onMouseLeave="onMouseLeaveTask(event)" onMouseOver="onMouseOverTask(event)" onClick="onClickTask(event)"><div contenteditable="false"><input type="checkbox" onClick="handleCheckboxClick(event)"/></div><div>${content ||
+  task.innerHTML = `<div taskID="${id}" id="${id}" class="task" onMouseDown="onMouseDownTask(event)" onMouseLeave="onMouseLeaveTask(event)" onMouseOver="onMouseOverTask(event)" onClick="onClickTask(event)"><div class="checkbox-wrapper" contenteditable="false"><input type="checkbox" onClick="handleCheckboxClick(event)"/></div><div>${content ||
     "<br/>"}</div></div>`;
   return task;
 }
@@ -281,7 +295,6 @@ function onClickTask(e) {
     document.body.appendChild(popover);
   }
 }
-
 function createDetailView() {
   var data = detailInfo;
   var popover = document.createElement("div");
@@ -305,7 +318,10 @@ function onDueDateChange(e) {
 }
 
 function onNotesChange(e) {
-  detailInfo.notes = e.target.value;
+  var element = e.target;
+  detailInfo.notes = element.value;
+  element.style.height = "5px";
+  element.style.height = element.scrollHeight + "px";
 }
 
 function removeDetailView(e) {

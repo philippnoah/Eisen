@@ -1,5 +1,12 @@
 # Mac
 .DS_Store
+*.plist
+
+Dist
+Eisen-darwin-x64/
+
+App Store
+screenshots/
 
 node_modules
 # Logs
