@@ -2,13 +2,18 @@
 .DS_Store
 *.plist
 
-Dist
+# Dist
+dist/
+build/
 Eisen-darwin-x64/
+Eisen-mas-x64/
+*.certSigningRequest
 
-App Store
+# App Store
 screenshots/
 
 node_modules
+
 # Logs
 logs
 *.log

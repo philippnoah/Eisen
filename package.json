@@ -1,12 +1,15 @@
 {
   "name": "Eisen",
-  "version": "1.0.1",
+  "version": "1.1.12",
   "description": "An Eisenhower matrix app",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
-    "package": "asar pack ./Eisen-darwin-x64/Eisen.app/Contents/Resources/app ./Eisen-darwin-x64/Eisen.app/Contents/Resources/app.asar",
+    "package": "sudo asar pack ./Eisen-mas-x64/Eisen.app/Contents/Resources/app ./Eisen-mas-x64/Eisen.app/Contents/Resources/app.asar",
     "start": "electron .",
-    "build": "electron-packager .  --icon=./assets/icon.icns --overwrite=true"
+    "build": "sudo electron-packager .  --icon=./assets/icons/mac/icon.icns --overwrite=true --app-bundle-id=com.philippeibl.eisen --platform=mas --prune=true --hardenedRuntime --osx-sign.type=distribution --osx-sign.identity='3rd Party Mac Developer Application: Philipp Eibl (LM2ZWJRF67)' --osx-sign.entitlements='./entitlements.plist' --osx-sign.provisioning-profile='./embedded.provisionprofile' --osx-sign.hardened-runtime --no-deref-symlinks",
+    "pack": "sudo electron-packager ./dist/mac/Eisen.app  --icon=./assets/icons/mac/icon.icns --overwrite=true --app-bundle-id=com.philippeibl.eisen --platform=mas",
+    "dist": "electron-builder",
+    "sign": "electron-osx-sign ./dist/mac/Eisen.app"
   },
   "keywords": [
     "to-do",
@@ -18,10 +21,31 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "asar": "^3.0.3",
-    "electron": "^8.2.3"
+    "electron": "^8.2.3",
+    "electron-builder": "^22.6.0",
+    "electron-notarize": "^0.3.0"
   },
   "dependencies": {
     "electron-context-menu": "^2.0.0",
-    "electron-packager": "^14.2.1"
+    "electron-osx-sign": "^0.4.15",
+    "electron-packager": "^14.2.1",
+    "libnpm": "^3.0.1"
+  },
+  "build": {
+    "appId": "com.philippeibl.eisen",
+    "target": "mac",
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "target": ["mas-dev", "mas"],
+      "category": "public.app-category.productivity",
+      "icon": "assets/icons/mac/icon.icns",
+      "provisioningProfile": "distribution.provisionprofile"
+    },
+    "mas": {
+      "entitlements": "entitlements.mas.plist",
+      "entitlementsInherit": "entitlements.mas.plist",
+      "icon": "./assets/mac/icon.icns"
+    }
   }
 }

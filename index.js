@@ -2,8 +2,15 @@
 const {app, BrowserWindow, Menu, ipcMain} = require("electron");
 const path = require("path");
 const contextMenu = require("electron-context-menu");
+const packager = require("electron-packager");
+// This line gets the code from the newly created file logger.js
+const logger = require("./logger");
 
 var shouldClose = false;
+
+app.on("uncaughtException", function(err) {
+  console.log(err);
+});
 
 contextMenu({
   prepend: (defaultActions, params, browserWindow) => [
@@ -42,17 +49,25 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
     height: 800,
+    sandbox: true,
     // frame: false,
+    // titleBarStyle: "hidden",
     webPreferences: {
       nodeIntegration: true
+      // sandbox: true
     }
   });
 
   // and load the index.html of the app.
   win.loadFile("index.html");
+  logger.log("test");
 
   // Open the DevTools.
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
+
+  win.webContents.on("devtools-opened", () => {
+    win.webContents.closeDevTools();
+  });
 }
 
 // This method will be called when Electron has finished
